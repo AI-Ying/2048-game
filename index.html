@@ -166,6 +166,29 @@
     100% { transform: scale(1); }
   }
 
+  /* feaure001: 数字动物化展示 —— 动物 emoji 为主体，数字为小角标 */
+  .tile {
+    flex-direction: column;
+    gap: 2px;
+    line-height: 1;
+  }
+  .tile .animal {
+    font-size: 40px;
+    line-height: 1;
+    display: block;
+  }
+  .tile .num {
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1;
+    display: block;
+    opacity: .9;
+  }
+  .tile-128 .animal, .tile-256 .animal, .tile-512 .animal { font-size: 34px; }
+  .tile-1024 .animal, .tile-2048 .animal, .tile-super .animal { font-size: 28px; }
+  .tile.tiny .animal { font-size: 24px !important; }
+  .tile.tiny .num { display: none; }
+
   /* 数字超过1000时缩小字号 */
   .tile.tiny { font-size: 20px !important; }
 
@@ -195,7 +218,7 @@
   </div>
 
   <div class="subhead">
-    <span class="hint">用 <b>方向键</b> 或 <b>滑动</b> 合并数字</span>
+    <span class="hint">合并动物，进化成更强大的神兽！</span>
     <button class="btn" id="restartBtn">新游戏</button>
   </div>
 
@@ -209,8 +232,8 @@
   </div>
 
   <div class="footer">
-    经典 2048 | 单页应用 · 无需联网<br>
-    目标：合并出 2048 方块
+    动物版 2048 | 单页应用 · 无需联网<br>
+    目标：合并出神龙 · 2048
   </div>
 </div>
 
@@ -263,7 +286,18 @@
         const tile = document.createElement('div');
         tile.className = 'tile ' + tileClass(val);
         if (val >= 1000) tile.classList.add('tiny');
-        tile.textContent = val;
+
+        // feaure001: 动物为主、数字为角标
+        const animal = animalFor(val);
+        const anim = document.createElement('span');
+        anim.className = 'animal';
+        anim.textContent = animal.emoji;
+        anim.title = animal.name;
+        const num = document.createElement('span');
+        num.className = 'num';
+        num.textContent = val;
+        tile.appendChild(anim);
+        if (val < 1000) tile.appendChild(num);
 
         const left = GRID_GAP + c * (tileSize + GRID_GAP);
         const top = GRID_GAP + r * (tileSize + GRID_GAP);
@@ -278,6 +312,26 @@
   function tileClass(val) {
     if (val <= 2048) return 'tile-' + val;
     return 'tile-super';
+  }
+
+  // feaure001: 数字→动物 映射（数值越大，动物越稀有/强大）
+  const ANIMAL_MAP = {
+    2:    { emoji: '🐁', name: '小鼠' },
+    4:    { emoji: '🐹', name: '仓鼠' },
+    8:    { emoji: '🐰', name: '兔子' },
+    16:   { emoji: '🐱', name: '小猫' },
+    32:   { emoji: '🐶', name: '小狗' },
+    64:   { emoji: '🐺', name: '狼' },
+    128:  { emoji: '🦊', name: '狐狸' },
+    256:  { emoji: '🐻', name: '熊' },
+    512:  { emoji: '🦁', name: '狮子' },
+    1024: { emoji: '🐯', name: '老虎' },
+    2048: { emoji: '🐲', name: '神龙' }
+  };
+
+  function animalFor(val) {
+    if (ANIMAL_MAP[val]) return ANIMAL_MAP[val];
+    return { emoji: '🐉', name: '神兽' };
   }
 
   // ---------- 核心逻辑 ----------
@@ -359,7 +413,7 @@
     renderTiles();
 
     if (wonMerged) {
-      showOverlay('你赢了！', '已合并出 2048\n继续玩可以追求更高分', false);
+      showOverlay('神龙现世！', '你合并出了 2048\n继续玩可以召唤更多神兽', false);
     } else if (isGameOver()) {
       gameOver = true;
       showOverlay('游戏结束', '没有可用的移动了', true);
