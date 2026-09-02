@@ -4,6 +4,11 @@
 
 格式基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)，版本号遵循 [SemVer](https://semver.org/lang/zh-CN/)。
 
+## [1.0.1] - 2026-09-01
+
+### 修复
+- 移除动物图标内的小数字角标，动画 eoji 单独占据棋盘格，视觉更干净
+
 ## [1.0.0] - 2026-09-01
 
 ### 新增

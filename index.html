@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>2048 动物版 · v1.0.0</title>
+<title>2048 动物版 · v1.0.1</title>
 <style>
   :root {
     --bg-page: #faf8ef;
@@ -166,10 +166,8 @@
     100% { transform: scale(1); }
   }
 
-  /* feaure001: 数字动物化展示 —— 动物 emoji 为主体，数字为小角标 */
+  /* feaure001: 数字动物化展示 —— 动物 emoji 为主体 */
   .tile {
-    flex-direction: column;
-    gap: 2px;
     line-height: 1;
   }
   .tile .animal {
@@ -177,20 +175,9 @@
     line-height: 1;
     display: block;
   }
-  .tile .num {
-    font-size: 12px;
-    font-weight: 700;
-    line-height: 1;
-    display: block;
-    opacity: .9;
-  }
   .tile-128 .animal, .tile-256 .animal, .tile-512 .animal { font-size: 34px; }
   .tile-1024 .animal, .tile-2048 .animal, .tile-super .animal { font-size: 28px; }
   .tile.tiny .animal { font-size: 24px !important; }
-  .tile.tiny .num { display: none; }
-
-  /* 数字超过1000时缩小字号 */
-  .tile.tiny { font-size: 20px !important; }
 
   .footer { margin-top: 20px; font-size: 12px; color: #a99c8c; text-align: center; line-height: 1.6; }
 
@@ -232,7 +219,7 @@
   </div>
 
   <div class="footer">
-    动物版 2048 v1.0.0 | 单页应用 · 无需联网<br>
+    动物版 2048 v1.0.1 | 单页应用 · 无需联网<br>
     目标：合并出神龙 · 2048
   </div>
 </div>
@@ -287,17 +274,13 @@
         tile.className = 'tile ' + tileClass(val);
         if (val >= 1000) tile.classList.add('tiny');
 
-        // feaure001: 动物为主、数字为角标
+        // feaure001: 动物为主展示
         const animal = animalFor(val);
         const anim = document.createElement('span');
         anim.className = 'animal';
         anim.textContent = animal.emoji;
         anim.title = animal.name;
-        const num = document.createElement('span');
-        num.className = 'num';
-        num.textContent = val;
         tile.appendChild(anim);
-        if (val < 1000) tile.appendChild(num);
 
         const left = GRID_GAP + c * (tileSize + GRID_GAP);
         const top = GRID_GAP + r * (tileSize + GRID_GAP);
